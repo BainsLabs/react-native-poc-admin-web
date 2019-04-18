@@ -12,12 +12,12 @@ import Paper from "@material-ui/core/Paper";
 import Type from "../common/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { styles } from "./styles";
-import {} from "../../redux/actions/employeeActions";
+import { loginAdmin } from "../../redux/actions/employeeActions";
 import Snackbar from "../common/Snackbar";
 
 class SignIn extends Component {
   state = {
-    username: "",
+    email: "",
     password: "",
     SnackbarOpen: false,
     SnackbarMessage: ""
@@ -32,18 +32,18 @@ class SignIn extends Component {
   onSubmit = async e => {
     e.preventDefault();
     const {
-      publisherLogin,
+      loginAdmin,
       history: { push }
     } = this.props;
     const coppiedState = Object.assign({}, this.state);
     const { SnackbarMessage, SnackbarOpen, ...params } = coppiedState;
-    // const res = await publisherLogin(params);
-    // if (res.status === 200) {
-    //   console.log(res, "user");
-    //   localStorage.setItem("userToken", res.token);
-    //   if (res.user.is_admin) {
-    //     localStorage.setItem("isAdmin", res.user.is_admin);
-    //   }
+    const res = await loginAdmin(params);
+    if (res.status === 200) {
+      console.log(res, "user");
+      // localStorage.setItem("userToken", res.token);
+      // if (res.user.is_admin) {
+      //   localStorage.setItem("isAdmin", res.user.is_admin);
+    }
     // } else {
     //   this.setState({
     //     SnackbarOpen: true,
@@ -54,7 +54,7 @@ class SignIn extends Component {
 
   render() {
     const { classes } = this.props;
-    const { username, password, SnackbarMessage, SnackbarOpen } = this.state;
+    const { email, password, SnackbarMessage, SnackbarOpen } = this.state;
     return (
       <main className={classes.main}>
         <CssBaseline />
@@ -70,9 +70,9 @@ class SignIn extends Component {
               <InputLabel htmlFor="username">Email Address</InputLabel>
               <Input
                 id="username"
-                name="username"
+                name="email"
                 autoFocus
-                value={username}
+                value={email}
                 onChange={this.onChange}
               />
             </FormControl>
@@ -111,9 +111,8 @@ class SignIn extends Component {
     );
   }
 }
-const mapDispatchToProps = {};
 
 export default connect(
   null,
-  mapDispatchToProps
+  { loginAdmin }
 )(withStyles(styles)(SignIn));

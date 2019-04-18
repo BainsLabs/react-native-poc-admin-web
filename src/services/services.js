@@ -1,8 +1,12 @@
 import axios from "axios";
 const service = axios.create({
-  baseURL: "http://localhost:8000/"
+  baseURL: "http://08e62cd9.ngrok.io/"
 });
 
-export const allEmployees = () => {
-  return service.get("appadmin/allemployee");
+export const allEmployeesApi = () => {
+  return service.post("appadmin/allemployee");
+};
+
+export const loginAdminApi = params => {
+  return service.post(`appadmin/adminlogin`, params);
 };
