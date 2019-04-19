@@ -13,7 +13,11 @@ import { getAllEmployess } from "../../redux/actions/employeeActions";
 
 class EmployeeList extends Component {
   componentWillMount() {
-    this.props.getAllEmployess();
+    const token = localStorage.getItem("is_admin");
+    const params = {
+      is_admin: token
+    };
+    this.props.getAllEmployess(params);
   }
 
   renderTableHeading = () => {
@@ -32,15 +36,13 @@ class EmployeeList extends Component {
   renderTableBody = () => {
     const { employees } = this.props;
     if (employees && !_.isEmpty(employees)) {
-      return (
-        <TableRow>
-          {Object.keys(employees).map(key => {
-            return Object.values(employees[key]).map(body => (
-              <TableCell key={body}>{body}</TableCell>
-            ));
-          })}
+      return Object.keys(employees).map((key, index) => (
+        <TableRow key={index}>
+          {Object.values(employees[key]).map(body => (
+            <TableCell key={body}>{body}</TableCell>
+          ))}
         </TableRow>
-      );
+      ));
     }
   };
 

@@ -27,7 +27,7 @@ class Navbar extends Component {
 
   render() {
     const { classes, history } = this.props;
-    const token = localStorage.getItem("userToken");
+    const token = localStorage.getItem("is_admin");
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -35,14 +35,26 @@ class Navbar extends Component {
             <Type variant="h6" color="inherit" className={classes.grow}>
               <ul>
                 <li>
-                  <Btn color="inherit">BAINSLABS DASHBOARD</Btn>
+                  <Btn color="inherit">BAINSLABS</Btn>
                 </li>
               </ul>
             </Type>
             {token ? (
-              <Btn color="inherit" onClick={this.logout}>
-                Logout
-              </Btn>
+              <ul>
+                <li>
+                  <Btn
+                    color="inherit"
+                    onClick={() => history.push("/dashboard")}
+                  >
+                    DASHBOARD
+                  </Btn>
+                </li>
+                <li>
+                  <Btn color="inherit" onClick={this.logout}>
+                    Logout
+                  </Btn>
+                </li>
+              </ul>
             ) : null}
           </Toolbar>
         </AppBar>

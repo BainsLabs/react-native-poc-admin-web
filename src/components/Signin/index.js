@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
@@ -39,17 +38,21 @@ class SignIn extends Component {
     const { SnackbarMessage, SnackbarOpen, ...params } = coppiedState;
     const res = await loginAdmin(params);
     if (res.status === 200) {
-      console.log(res, "user");
-      // localStorage.setItem("userToken", res.token);
-      // if (res.user.is_admin) {
-      //   localStorage.setItem("isAdmin", res.user.is_admin);
+      if (res.user.isAdmin) {
+        push("/dashboard");
+        localStorage.setItem("is_admin", res.user.isAdmin);
+      } else {
+        this.setState({
+          SnackbarOpen: true,
+          SnackbarMessage: "Sorry, you are not admin"
+        });
+      }
+    } else {
+      this.setState({
+        SnackbarOpen: true,
+        SnackbarMessage: res.message
+      });
     }
-    // } else {
-    //   this.setState({
-    //     SnackbarOpen: true,
-    //     SnackbarMessage: res.message
-    //   });
-    // }
   };
 
   render() {
@@ -73,6 +76,7 @@ class SignIn extends Component {
                 name="email"
                 autoFocus
                 value={email}
+                type="email"
                 onChange={this.onChange}
               />
             </FormControl>
@@ -83,10 +87,10 @@ class SignIn extends Component {
                 type="password"
                 id="password"
                 value={password}
+                minLength={8}
                 onChange={this.onChange}
               />
             </FormControl>
-            <Link to="/forget-password">Forgot Password?</Link>
             <Button
               type="submit"
               fullWidth

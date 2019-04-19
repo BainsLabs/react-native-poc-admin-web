@@ -14,9 +14,13 @@ const Input = props => {
     type = "text",
     rowsMax = "",
     select = false,
+    disabled = false,
     SelectProps = {},
     onChange = () => console.log("change"),
-    multiline = false
+    multiline = false,
+    margin = "none",
+    variant = "standard",
+    InputLabelProps = {}
   } = props;
   return (
     <TextField
@@ -27,13 +31,17 @@ const Input = props => {
       multiline={multiline}
       helperText={helperText}
       name={name}
+      margin={margin}
+      variant={variant}
       label={label}
+      disabled={disabled}
       type={type}
       placeholder={placeholder}
       fullWidth={fullWidth}
       autoComplete={autoComplete}
       onChange={onChange}
       rowsMax={rowsMax}
+      InputLabelProps={InputLabelProps}
     >
       {props.children}
     </TextField>

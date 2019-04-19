@@ -7,7 +7,7 @@ const PrivateRoute = ({ component: Component, user, ...rest }) => {
     <Route
       {...rest}
       render={props =>
-        localStorage.getItem("userToken") ? (
+        localStorage.getItem("is_admin") ? (
           <Component {...props} />
         ) : (
           <Redirect to="/" />
