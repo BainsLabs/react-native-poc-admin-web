@@ -33,11 +33,8 @@ class Checkout extends Component {
   };
 
   onFileDrop = file => {
-    const formData = new FormData();
-    formData.append("file", file[0]);
-    console.log(formData.get("file"));
     this.setState({
-      user_image: formData
+      user_image: file
     });
   };
 
@@ -49,7 +46,7 @@ class Checkout extends Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    console.dir(this.state, "state");
+    const formData = new FormData();
     const {
       history: { push },
       submitEmployee
@@ -64,14 +61,23 @@ class Checkout extends Component {
       showLoader,
       snackbar_message,
       disable,
+      user_image,
       ...params
     } = coppiedState;
-    const res = await submitEmployee(params);
-    this.setState({
-      snackbar_message: res.message,
-      showSnackbar: true,
-      showLoader: false
-    });
+    for (var key in params) {
+      formData.append(key, coppiedState[key]);
+    }
+    formData.append("user_image", user_image[0]);
+
+    const res = await submitEmployee(formData);
+    this.setState(
+      {
+        snackbar_message: res.message,
+        showSnackbar: true,
+        showLoader: false
+      },
+      () => push("/dashboard")
+    );
   };
 
   renderForms = () => {
@@ -114,7 +120,13 @@ class Checkout extends Component {
             {showLoader ? (
               <Loader color="primary" />
             ) : (
-              <Btn onClick={this.handleSubmit}>Submit</Btn>
+              <Btn
+                color="primary"
+                variant="contained"
+                onClick={this.handleSubmit}
+              >
+                Submit
+              </Btn>
             )}
           </div>
         </main>

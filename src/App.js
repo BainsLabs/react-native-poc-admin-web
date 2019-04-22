@@ -21,8 +21,9 @@ const App = () => (
         <Fragment>
           <Navbar />
           <Switch>
-            <Route exact path="/" component={Form} />
-            <Route path="/dashboard" component={Dashboard} />
+            <Route exact path="/" component={SignIn} />
+            <PrivateRoute path="/dashboard" component={Dashboard} />
+            <PrivateRoute path="/register-employee" component={Form} />
           </Switch>
         </Fragment>
       </Router>

@@ -1,8 +1,7 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { connect } from "react-redux";
 
-const PrivateRoute = ({ component: Component, user, ...rest }) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -17,11 +16,4 @@ const PrivateRoute = ({ component: Component, user, ...rest }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  user: state.publisher.userData
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(PrivateRoute);
+export default PrivateRoute;

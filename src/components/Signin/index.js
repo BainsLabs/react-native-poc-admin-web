@@ -39,8 +39,8 @@ class SignIn extends Component {
     const res = await loginAdmin(params);
     if (res.status === 200) {
       if (res.user.isAdmin) {
+        await localStorage.setItem("is_admin", res.user.isAdmin);
         push("/dashboard");
-        localStorage.setItem("is_admin", res.user.isAdmin);
       } else {
         this.setState({
           SnackbarOpen: true,

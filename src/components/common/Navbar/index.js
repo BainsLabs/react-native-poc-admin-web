@@ -44,6 +44,14 @@ class Navbar extends Component {
                 <li>
                   <Btn
                     color="inherit"
+                    onClick={() => history.push("/register-employee")}
+                  >
+                    Register Employee
+                  </Btn>
+                </li>
+                <li>
+                  <Btn
+                    color="inherit"
                     onClick={() => history.push("/dashboard")}
                   >
                     DASHBOARD

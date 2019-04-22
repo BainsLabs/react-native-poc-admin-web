@@ -5,13 +5,14 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Type from "../../common/Typography";
 import Input from "../../common/Forms/TextField";
 import Dropzone from "react-dropzone";
+import Typography from "@material-ui/core/Typography";
 
 class EmployeeForm extends Component {
   state = {
     checked: false
   };
 
-  handleChange = checked => {
+  handleChange = () => {
     this.setState({
       checked: !this.state.checked
     });
@@ -25,18 +26,44 @@ class EmployeeForm extends Component {
       employeeId,
       permanentAddress,
       currentAddress,
-      userImage,
       fileDrop,
+      userImage = {},
       change
     } = this.props;
     const { checked } = this.state;
+    console.log((userImage && userImage[0]) || "", "image");
     return (
       <Fragment>
         <Type variant="h6" gutterBottom>
           Employee Details
         </Type>
         <Grid container spacing={24}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={12}>
+            <Dropzone
+              onDrop={acceptedFiles => fileDrop(acceptedFiles)}
+              style={{
+                borderWidth: 0.3,
+                borderRadius: 80,
+                height: 200,
+                width: 200,
+                textAlign: "center"
+              }}
+              accept="image/*"
+            >
+              {userImage ? (
+                <img
+                  alt="employee"
+                  src={userImage[0].preview}
+                  style={{ borderRadius: 100, height: 200, width: 200 }}
+                />
+              ) : (
+                <Typography variant="subtitle1" style={{ margin: 50 }}>
+                  Drop or Select Image
+                </Typography>
+              )}
+            </Dropzone>
+          </Grid>
+          <Grid item xs={12} sm={12}>
             <Input
               required
               id="name"
@@ -109,54 +136,12 @@ class EmployeeForm extends Component {
               control={
                 <Checkbox
                   color="primary"
-                  onChange={() => this.handleChange("checked")}
+                  onChange={this.handleChange}
                   value="checked"
                 />
               }
               label="Same as Permanent Address"
             />
-          </Grid>
-          <Grid item xs={12} sm={12}>
-            <Dropzone
-              onDrop={acceptedFiles => fileDrop(acceptedFiles)}
-              style={{}}
-              accept="image/*"
-            >
-              {({ getRootProps, getInputProps }) => (
-                <section>
-                  <div {...getRootProps()}>
-                    <input {...getInputProps()} />
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
-                  </div>
-                </section>
-              )}
-            </Dropzone>
-            {/* <input
-              type="file"
-              multiple={false}
-              name="user_image"
-              ref={input => {
-                this.inpuElement = input;
-              }}
-              accept=".jpg,.jpeg,.png"
-              onChange={e => change(this, e)}
-            /> */}
-            {/* <Input
-              id="userImage"
-              name="user_image"
-              label="Employee-Image"
-              value={userImage}
-              fullWidth
-              type="file"
-              margin="normal"
-              InputLabelProps={{
-                shrink: true
-              }}
-              variant="outlined"
-              onChange={e => change(this, e)}
-            /> */}
           </Grid>
         </Grid>
       </Fragment>
