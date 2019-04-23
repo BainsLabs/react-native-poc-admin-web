@@ -1,6 +1,6 @@
 import axios from "axios";
 const service = axios.create({
-  baseURL: "http://127.0.0.1:8000/"
+  baseURL: "http://21cffb05.ngrok.io/"
 });
 service.interceptors.response.use(
   response => response,
@@ -22,4 +22,8 @@ export const loginAdminApi = params => {
 
 export const submitEmployeeApi = params => {
   return service.post("employee/new_employee", params);
+};
+
+export const employeeTimingsApi = params => {
+  return service.post("employeetime", params);
 };

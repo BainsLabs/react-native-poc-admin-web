@@ -1,15 +1,19 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import { styles } from "./styles";
 import _ from "lodash";
+import Btn from "../common/Forms/Button";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { getAllEmployess } from "../../redux/actions/employeeActions";
+import {
+  getAllEmployess,
+  employeeTimings
+} from "../../redux/actions/employeeActions";
 
 class EmployeeList extends Component {
   componentWillMount() {
@@ -18,6 +22,15 @@ class EmployeeList extends Component {
       is_admin: token
     };
     this.props.getAllEmployess(params);
+  }
+
+  async seeTimings(e) {
+    const { employeeTimings } = this.props;
+    const params = {
+      email: e.props.employees[0].official_email,
+      is_superuser: localStorage.getItem("is_admin")
+    };
+    await employeeTimings(params);
   }
 
   renderTableHeading = () => {
@@ -41,6 +54,13 @@ class EmployeeList extends Component {
           {Object.values(employees[key]).map(body => (
             <TableCell key={body}>{body}</TableCell>
           ))}
+          <Btn
+            color="inherit"
+            variant="contain"
+            onClick={() => this.seeTimings(this)}
+          >
+            See Timings
+          </Btn>
         </TableRow>
       ));
     }
@@ -63,11 +83,12 @@ class EmployeeList extends Component {
 }
 
 const mapStateToProps = state => ({
-  employees: _.get(state, "employee") || {}
+  employees: _.get(state, "employee.employeelist") || {}
 });
 
 const mapDispatchToProps = {
-  getAllEmployess
+  getAllEmployess,
+  employeeTimings
 };
 
 export default connect(

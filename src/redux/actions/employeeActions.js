@@ -1,6 +1,7 @@
 import {
   allEmployeesApi,
   loginAdminApi,
+  employeeTimingsApi,
   submitEmployeeApi
 } from "../../services/services";
 import * as employee from "../actiontypes/employeeTypes";
@@ -29,4 +30,12 @@ export const submitEmployee = params => async dispatch => {
     payload: response.data
   });
   return response.data;
+};
+
+export const employeeTimings = params => async dispatch => {
+  const response = await employeeTimingsApi(params);
+  dispatch({
+    type: employee.EMPLOYEE_TIMINGS,
+    payload: response.data
+  });
 };
