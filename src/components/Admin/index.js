@@ -5,18 +5,22 @@ import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import { styles } from "./styles";
 import _ from "lodash";
-import Btn from "../common/Forms/Button";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import EmployeeTimings from "../TimingTable";
 import {
   getAllEmployess,
   employeeTimings
 } from "../../redux/actions/employeeActions";
 
 class EmployeeList extends Component {
+  state = {
+    expandedRows: [],
+    rowId: null
+  };
   componentWillMount() {
     const token = localStorage.getItem("is_admin");
     const params = {
@@ -24,6 +28,25 @@ class EmployeeList extends Component {
     };
     this.props.getAllEmployess(params);
   }
+
+  handleRowClick = async (rowId, rowEmail) => {
+    this.setState({
+      rowId
+    });
+    const { employeeTimings } = this.props;
+    const currentExpandedRows = this.state.expandedRows;
+    const isRowCurrentlyExpanded = currentExpandedRows.includes(rowId);
+
+    const newExpandedRows = isRowCurrentlyExpanded
+      ? currentExpandedRows.filter(id => id !== rowId)
+      : currentExpandedRows.concat(rowId);
+    const params = {
+      is_superuser: localStorage.getItem("is_admin"),
+      email: rowEmail
+    };
+    await employeeTimings(params);
+    this.setState({ expandedRows: newExpandedRows });
+  };
 
   async seeTimings(e) {
     const {
@@ -53,21 +76,32 @@ class EmployeeList extends Component {
 
   renderTableBody = () => {
     const { employees } = this.props;
+    const { expandedRows, rowId } = this.state;
     if (employees && !_.isEmpty(employees)) {
-      return Object.keys(employees).map((key, index) => (
-        <TableRow key={index}>
-          {Object.values(employees[key]).map(body => (
-            <TableCell key={body}>{body}</TableCell>
-          ))}
-          <Btn
-            color="inherit"
-            variant="contain"
-            onClick={() => this.seeTimings(this)}
-          >
-            See Timings
-          </Btn>
-        </TableRow>
-      ));
+      let itemRows = [
+        ...Object.keys(employees).map(key => {
+          return (
+            <TableRow
+              onClick={() =>
+                this.handleRowClick(
+                  employees[key].id,
+                  employees[key].official_email
+                )
+              }
+              key={"row-data-" + employees[key].id}
+            >
+              {Object.values(employees[key]).map(body => (
+                <TableCell key={body}>{body}</TableCell>
+              ))}
+            </TableRow>
+          );
+        })
+      ];
+
+      if (expandedRows.includes(rowId)) {
+        itemRows.splice(rowId, 0, <EmployeeTimings />);
+      }
+      return itemRows;
     }
   };
 
