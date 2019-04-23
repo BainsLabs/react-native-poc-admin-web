@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import SignIn from "./components/Signin";
 import Navbar from "./components/common/Navbar";
 import Dashboard from "./components/Dashboard";
+import EmployeeTiming from "./components/TimingTable";
 import "semantic-ui-container/container.min.css";
 import Form from "./components/Form";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -24,6 +25,7 @@ const App = () => (
             <Route exact path="/" component={SignIn} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute path="/register-employee" component={Form} />
+            <PrivateRoute path="/employee-time" component={EmployeeTiming} />
           </Switch>
         </Fragment>
       </Router>

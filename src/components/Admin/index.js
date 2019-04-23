@@ -1,5 +1,6 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import { styles } from "./styles";
@@ -25,12 +26,16 @@ class EmployeeList extends Component {
   }
 
   async seeTimings(e) {
-    const { employeeTimings } = this.props;
+    const {
+      employeeTimings,
+      history: { push }
+    } = this.props;
     const params = {
       email: e.props.employees[0].official_email,
       is_superuser: localStorage.getItem("is_admin")
     };
     await employeeTimings(params);
+    push("/employee-time");
   }
 
   renderTableHeading = () => {
@@ -91,7 +96,9 @@ const mapDispatchToProps = {
   employeeTimings
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(EmployeeList));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(withStyles(styles)(EmployeeList))
+);
