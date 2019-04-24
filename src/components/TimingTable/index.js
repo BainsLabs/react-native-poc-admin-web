@@ -1,68 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
+import Table from "../common/Table";
 import { withRouter } from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import { styles } from "./styles";
-import _ from "lodash";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import get from "lodash/get";
 
-class EmployeeTiming extends Component {
-  renderTableHeading = () => {
-    const { employees } = this.props;
-    if (employees && !_.isEmpty(employees)) {
-      return (
-        <TableRow>
-          {Object.keys(employees[0]).map(heading => (
-            <TableCell key={heading}>{heading}</TableCell>
-          ))}
-        </TableRow>
-      );
-    }
-  };
-
-  renderTableBody = () => {
-    const { employees } = this.props;
-    if (employees && !_.isEmpty(employees)) {
-      return Object.keys(employees).map(key => {
-        return (
-          <TableRow key={"row-data-" + employees[key].id}>
-            {Object.values(employees[key]).map(body => (
-              <TableCell key={body}>{body}</TableCell>
-            ))}
-          </TableRow>
-        );
-      });
-    }
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.layout}>
-        <h2 align="center">Employees</h2>
-        <Paper className={classes.root}>
-          <Table className={classes.table}>
-            <TableHead>{this.renderTableHeading()}</TableHead>
-            <TableBody>{this.renderTableBody()}</TableBody>
-          </Table>
-        </Paper>
-      </div>
-    );
-  }
-}
+const EmployeeTiming = props => {
+  const { employees } = props;
+  return <Table title="Employee Timings" data={employees} />;
+};
 
 const mapStateToProps = state => ({
-  employees: _.get(state, "employee.employee_time") || {}
+  employees: get(state, "employee.employee_time") || {}
 });
 
 export default withRouter(
   connect(
     mapStateToProps,
     null
-  )(withStyles(styles)(EmployeeTiming))
+  )(EmployeeTiming)
 );

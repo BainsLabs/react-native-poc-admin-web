@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -11,13 +10,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-class Table extends Component {
+class TableComponent extends Component {
   renderTableHeading = () => {
-    const { employees } = this.props;
-    if (employees && !_.isEmpty(employees)) {
+    const { data } = this.props;
+    if (data && !_.isEmpty(data)) {
       return (
         <TableRow>
-          {Object.keys(employees[0]).map(heading => (
+          {Object.keys(data[0]).map(heading => (
             <TableCell key={heading}>{heading}</TableCell>
           ))}
         </TableRow>
@@ -26,12 +25,15 @@ class Table extends Component {
   };
 
   renderTableBody = () => {
-    const { employees } = this.props;
-    if (employees && !_.isEmpty(employees)) {
-      return Object.keys(employees).map(key => {
+    const { data, rowClick } = this.props;
+    if (data && !_.isEmpty(data)) {
+      return Object.keys(data).map(key => {
         return (
-          <TableRow key={"row-data-" + employees[key].id}>
-            {Object.values(employees[key]).map(body => (
+          <TableRow
+            onClick={rowClick ? () => rowClick(data[key].official_email) : null}
+            key={"row-data-" + data[key].id}
+          >
+            {Object.values(data[key]).map(body => (
               <TableCell key={body}>{body}</TableCell>
             ))}
           </TableRow>
@@ -56,4 +58,4 @@ class Table extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(Table));
+export default withRouter(withStyles(styles)(TableComponent));
