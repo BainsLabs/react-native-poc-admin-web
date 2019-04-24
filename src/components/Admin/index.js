@@ -1,57 +1,56 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import { styles } from "./styles";
 import _ from "lodash";
+import { componentWillMount } from "../../utils/componentWillMount";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-
 import {
   getAllEmployess,
   employeeTimings
 } from "../../redux/actions/employeeActions";
 
-class EmployeeList extends Component {
-  state = {
-    rowId: null
-  };
-  componentWillMount() {
-    const token = localStorage.getItem("is_admin");
+const EmployeeList = props => {
+  const token = localStorage.getItem("is_admin");
+  const { getAllEmployess } = props;
+  const checkLocalStorage = () => {
     const params = {
       is_admin: token
     };
-    this.props.getAllEmployess(params);
-  }
+    return params;
+  };
+  componentWillMount(checkLocalStorage, [token], getAllEmployess, {});
 
-  handleRowClick = async rowEmail => {
+  const handleRowClick = async rowEmail => {
     const params = {
-      is_superuser: localStorage.getItem("is_admin"),
+      is_superuser: token,
       email: rowEmail
     };
-    this.seeTimings(params);
+    seeTimings(params);
   };
 
-  async seeTimings(params) {
+  const seeTimings = async params => {
     const {
       employeeTimings,
       employeeStatus,
       history: { push }
-    } = this.props;
+    } = props;
 
     await employeeTimings(params);
     push("/employee-time");
     if (employeeStatus.status === 404 || 401) {
       return;
     }
-  }
+  };
 
-  renderTableHeading = () => {
-    const { employees } = this.props;
+  const renderTableHeading = () => {
+    const { employees } = props;
     if (employees && !_.isEmpty(employees)) {
       return (
         <TableRow>
@@ -63,14 +62,14 @@ class EmployeeList extends Component {
     }
   };
 
-  renderTableBody = () => {
-    const { employees } = this.props;
+  const renderTableBody = () => {
+    const { employees } = props;
 
     if (employees && !_.isEmpty(employees)) {
       return Object.keys(employees).map(key => {
         return (
           <TableRow
-            onClick={() => this.handleRowClick(employees[key].official_email)}
+            onClick={() => handleRowClick(employees[key].official_email)}
             key={"row-data-" + employees[key].id}
           >
             {Object.values(employees[key]).map(body => (
@@ -82,25 +81,23 @@ class EmployeeList extends Component {
     }
   };
 
-  render() {
-    const { classes, employeeMessage } = this.props;
-    return (
-      <div className={classes.layout}>
-        <h2 align="center">Employees</h2>
-        <Paper className={classes.root}>
-          {employeeMessage !== "" ? (
-            employeeMessage
-          ) : (
-            <Table className={classes.table}>
-              <TableHead>{this.renderTableHeading()}</TableHead>
-              <TableBody>{this.renderTableBody()}</TableBody>
-            </Table>
-          )}
-        </Paper>
-      </div>
-    );
-  }
-}
+  const { classes, employeeMessage } = props;
+  return (
+    <div className={classes.layout}>
+      <h2 align="center">Employees</h2>
+      <Paper className={classes.root}>
+        {employeeMessage !== "" ? (
+          employeeMessage
+        ) : (
+          <Table className={classes.table}>
+            <TableHead>{renderTableHeading()}</TableHead>
+            <TableBody>{renderTableBody()}</TableBody>
+          </Table>
+        )}
+      </Paper>
+    </div>
+  );
+};
 
 const mapStateToProps = state => ({
   employees: _.get(state, "employee.employeelist") || {},

@@ -41,10 +41,10 @@ class Table extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, Title } = this.props;
     return (
       <div className={classes.layout}>
-        <h2 align="center">Employees</h2>
+        <h2 align="center">{Title}</h2>
         <Paper className={classes.root}>
           <Table className={classes.table}>
             <TableHead>{this.renderTableHeading()}</TableHead>
@@ -56,4 +56,4 @@ class Table extends Component {
   }
 }
 
-export default withStyles(styles)(Table);
+export default withRouter(withStyles(styles)(Table));
