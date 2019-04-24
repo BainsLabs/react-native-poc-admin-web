@@ -8,8 +8,8 @@
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "node-sass": "^4.11.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-dropzone": "4.2.12",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
@@ -24,8 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "yarn build && aws s3 rm s3://seo-frontend --recursive && aws s3 sync build/ s3://seo-frontend --profile seo-us"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

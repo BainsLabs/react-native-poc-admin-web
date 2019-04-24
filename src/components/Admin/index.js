@@ -18,7 +18,6 @@ import {
 
 class EmployeeList extends Component {
   state = {
-    message: "",
     rowId: null
   };
   componentWillMount() {
