@@ -11,7 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-class EmployeeTiming extends Component {
+class Table extends Component {
   renderTableHeading = () => {
     const { employees } = this.props;
     if (employees && !_.isEmpty(employees)) {
@@ -56,13 +56,4 @@ class EmployeeTiming extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  employees: _.get(state, "employee.employee_time") || {}
-});
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    null
-  )(withStyles(styles)(EmployeeTiming))
-);
+export default withStyles(styles)(Table);

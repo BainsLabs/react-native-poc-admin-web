@@ -15,6 +15,8 @@ const theme = createMuiTheme({
   }
 });
 
+const isAdmin = localStorage.getItem("is_admin");
+
 const App = () => (
   <Fragment>
     <MuiThemeProvider theme={theme}>
@@ -22,7 +24,7 @@ const App = () => (
         <Fragment>
           <Navbar />
           <Switch>
-            <Route exact path="/" component={SignIn} />
+            <Route exact path="/" component={isAdmin ? Dashboard : SignIn} />
             <PrivateRoute path="/dashboard" component={Dashboard} />
             <PrivateRoute path="/register-employee" component={Form} />
             <PrivateRoute path="/employee-time" component={EmployeeTiming} />
